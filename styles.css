@@ -62,17 +62,37 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 12px;
-  border-radius: 16px;
-  background-color: #000000;
-  color: #FFFFFF;
-  border: none;
+  padding: 10px 20px 10px 10px;
+  border-radius: 50px;
+  background-color: #FFFFFF;
+  color: #333333;
+  border: 1px solid #E5E7EB;
   cursor: pointer;
   transition: all 0.2s ease;
   z-index: 10;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
-  box-shadow: 0 2px 8px rgba(255, 46, 77, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.back-btn:hover {
+  background-color: #F9FAFB;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 抖音图标样式 */
+.back-btn::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  background-color: #000000;
+  border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2325F4EE'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.17 6.17l-1.83 1.83c-1.02-1.02-2.4-1.64-3.92-1.64v2.64c.81 0 1.58.32 2.16.89l-4.3 4.3c-.58-.58-1.33-.89-2.14-.89-1.66 0-3.01 1.35-3.01 3.01s1.35 3.01 3.01 3.01 3.01-1.35 3.01-3.01V8.83c1.52 0 2.9.62 3.92 1.64l1.83-1.83c-.47-.47-.47-1.23 0-1.7s1.23-.47 1.7 0 .47 1.23 0 1.7z'/%3E%3C/svg%3E");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .title {
