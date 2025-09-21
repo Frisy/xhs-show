@@ -294,7 +294,7 @@ function createTypingIndicator() {
     '</div>' +
     '<div class="message-content">' +
       '<div class="message-header">' +
-        '<span class="ai-name">抖小芒AI</span>' + // 保持统一的AI名称
+        '<span class="ai-name">小芒书AI</span>' + // 保持统一的AI名称
       '</div>' +
       '<div class="message-text">' +
         '<div class="typing-dots">' +
@@ -383,7 +383,7 @@ function createAIMessage(text) {
     '</div>' +
     '<div class="message-content">' +
       '<div class="message-header">' +
-        '<span class="ai-name">抖小芒AI</span>' + // 保持统一的AI名称
+        '<span class="ai-name">小芒书AI</span>' + // 保持统一的AI名称
       '</div>' +
       '<div class="message-text">' +
         messageContent +
