@@ -5,7 +5,7 @@ const sectionStates = {};
 const sectionConfigs = {
   section1: {
     accessToken: "pat_ijPUwcT72jBK2ZaqWfSTettUAwKXQrj7Btftd4DuDMD0jM235e7zV0uBYRDi1Pae",
-    botId: "7543975076828971023"
+    botId: "7554647313675927590"
   },
   section2: {
     accessToken: "pat_ijPUwcT72jBK2ZaqWfSTettUAwKXQrj7Btftd4DuDMD0jM235e7zV0uBYRDi1Pae",
