@@ -4,26 +4,27 @@ const sectionStates = {};
 // 为每个section定义独立的API参数
 const sectionConfigs = {
   section1: {
-    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",
+    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",  
     botId: "7554647313675927590"
   },
   section2: {
-    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",
+    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",  
     botId: "7552543858085904424"  // 不同的bot_id
   },
   section3: {
-    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",
+    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",  
     botId: "7552547843530162211"  // 不同的bot_id
   },
   section4: {
-    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",
+    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",    
     botId: "7542276266360487963"  // 不同的bot_id
   },
   section5: {
-    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",
+    accessToken: "pat_6SVX5U5jTkr2wPAwqe2R7K0iUKkwsmbb6sajyjQTqzRAyfoOfkZVJtUMwwqsLnua",    
     botId: "7552550445202898996"  // 不同的bot_id
   }
 };
+
 
 // 初始化各section状态
 function initializeSectionStates() {
@@ -164,6 +165,45 @@ async function sendMessage(sectionId) {
   }
 }
 
+// 查找JSON字符串的结束位置
+function findJsonEnd(str, startIndex) {
+  let braceCount = 0;
+  let inString = false;
+  let escaped = false;
+  
+  for (let i = startIndex; i < str.length; i++) {
+    const char = str[i];
+    
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    
+    if (char === '\\') {
+      escaped = true;
+      continue;
+    }
+    
+    if (char === '"' && !escaped) {
+      inString = !inString;
+      continue;
+    }
+    
+    if (!inString) {
+      if (char === '{') {
+        braceCount++;
+      } else if (char === '}') {
+        braceCount--;
+        if (braceCount === 0) {
+          return i + 1; // 返回闭合大括号后的位置
+        }
+      }
+    }
+  }
+  
+  return -1; // 未找到完整的JSON
+}
+
 // 处理消息内容
 function processMessageContent(content, sectionId) {
   const state = getSectionState(sectionId);
@@ -176,22 +216,36 @@ function processMessageContent(content, sectionId) {
     
     const dataString = content.substring(eventDeltaIndex, endEventDeltaIndex);
     const dataPrefixIndex = dataString.indexOf('data:');
-    const jsonEndIndex = dataString.indexOf('}', dataPrefixIndex) + 1;
     
-    if (dataPrefixIndex !== -1 && jsonEndIndex > 0 && dataString[jsonEndIndex - 1] === '}') {
-      try {
-        const dataObject = JSON.parse(dataString.substring(dataPrefixIndex + 5, jsonEndIndex));
-        if (dataObject.content) {
-          // 提取 id 而不是 conversation_id
-          const messageId = dataObject.id || 'default';
-          state.messageQueue.push({ content: dataObject.content, messageId });
+    if (dataPrefixIndex !== -1) {
+      const jsonStartIndex = dataPrefixIndex + 5; // 跳过 "data:"
+      const jsonEndIndex = findJsonEnd(dataString, jsonStartIndex);
+      
+      if (jsonEndIndex !== -1) {
+        try {
+          const jsonString = dataString.substring(jsonStartIndex, jsonEndIndex);
+          console.log(`[${sectionId}] 尝试解析JSON:`, jsonString);
+          
+          const dataObject = JSON.parse(jsonString);
+          if (dataObject.content) {
+            // 提取 id 而不是 conversation_id
+            const messageId = dataObject.id || 'default';
+            state.messageQueue.push({ content: dataObject.content, messageId });
+          }
+          currentIndex = eventDeltaIndex + jsonEndIndex;
+        } catch (error) {
+          console.error(`[${sectionId}] JSON解析失败:`, error);
+          console.error(`[${sectionId}] 原始数据:`, dataString.substring(jsonStartIndex, Math.min(jsonStartIndex + 500, dataString.length)));
+          // 跳过这个无效的JSON，继续处理
+          currentIndex = eventDeltaIndex + dataString.length;
         }
-      } catch (error) {
-        console.error('JSON解析失败:', error);
+      } else {
+        // JSON不完整，等待更多数据
+        break;
       }
-      currentIndex = eventDeltaIndex + jsonEndIndex;
     } else {
-      break;
+      // 没有找到data:前缀，跳过这个事件
+      currentIndex = eventDeltaIndex + dataString.length;
     }
     
     eventDeltaIndex = nextEventDeltaIndex;
@@ -294,7 +348,7 @@ function createTypingIndicator() {
     '</div>' +
     '<div class="message-content">' +
       '<div class="message-header">' +
-        '<span class="ai-name">小芒书AI</span>' + // 保持统一的AI名称
+        '<span class="ai-name">抖小芒AI</span>' + // 保持统一的AI名称
       '</div>' +
       '<div class="message-text">' +
         '<div class="typing-dots">' +
@@ -383,7 +437,7 @@ function createAIMessage(text) {
     '</div>' +
     '<div class="message-content">' +
       '<div class="message-header">' +
-        '<span class="ai-name">小芒书AI</span>' + // 保持统一的AI名称
+        '<span class="ai-name">抖小芒AI</span>' + // 保持统一的AI名称
       '</div>' +
       '<div class="message-text">' +
         messageContent +
