@@ -4,23 +4,23 @@ const sectionStates = {};
 // 为每个section定义独立的API参数
 const sectionConfigs = {
   section1: {
-    accessToken: "pat_njYeNvNAgBz08OrQIlCztE89uBYQFS0t36JHeBzDpE3SCuSY8zslv5ywCWulELnN",  
+    accessToken: "pat_GJaXKBN6C6Ws8xIw2Ulbg6g9s5ljhv5TBhf5slNFGsznuBBNUOj6X0P85cTBHxlH",  
     botId: "7554647313675927590"
   },
   section2: {
-    accessToken: "pat_njYeNvNAgBz08OrQIlCztE89uBYQFS0t36JHeBzDpE3SCuSY8zslv5ywCWulELnN",  
+    accessToken: "pat_GJaXKBN6C6Ws8xIw2Ulbg6g9s5ljhv5TBhf5slNFGsznuBBNUOj6X0P85cTBHxlH",  
     botId: "7552543858085904424"  // 不同的bot_id
   },
   section3: {
-    accessToken: "pat_njYeNvNAgBz08OrQIlCztE89uBYQFS0t36JHeBzDpE3SCuSY8zslv5ywCWulELnN",  
+    accessToken: "pat_GJaXKBN6C6Ws8xIw2Ulbg6g9s5ljhv5TBhf5slNFGsznuBBNUOj6X0P85cTBHxlH",  
     botId: "7552547843530162211"  // 不同的bot_id
   },
   section4: {
-    accessToken: "pat_njYeNvNAgBz08OrQIlCztE89uBYQFS0t36JHeBzDpE3SCuSY8zslv5ywCWulELnN",    
+    accessToken: "pat_GJaXKBN6C6Ws8xIw2Ulbg6g9s5ljhv5TBhf5slNFGsznuBBNUOj6X0P85cTBHxlH",    
     botId: "7542276266360487963"  // 不同的bot_id
   },
   section5: {
-    accessToken: "pat_njYeNvNAgBz08OrQIlCztE89uBYQFS0t36JHeBzDpE3SCuSY8zslv5ywCWulELnN",    
+    accessToken: "pat_GJaXKBN6C6Ws8xIw2Ulbg6g9s5ljhv5TBhf5slNFGsznuBBNUOj6X0P85cTBHxlH",    
     botId: "7552550445202898996"  // 不同的bot_id
   }
 };
